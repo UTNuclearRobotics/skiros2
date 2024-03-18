@@ -1,7 +1,7 @@
 import rospy
 import skiros2_msgs.msg as msgs
 import skiros2_msgs.srv as srvs
-from std_srvs import Trigger, TriggerResponse
+from std_srvs.srv import Trigger, TriggerResponse
 import skiros2_common.ros.utils as utils
 from skiros2_skill.ros.utils import *
 import skiros2_world_model.ros.world_model_interface as wmi
