@@ -597,6 +597,7 @@ class SkirosWidget(QWidget, SkirosInteractiveMarkers):
         if self._sli.has_changes:
             self.create_skill_tree()
             self._sli.set_debug(self.debug_checkBox.isChecked())
+            log.debug(self.__class__.__name__, "Skill updated on GUI")
         # Update robot BT rate
         if self._sli.agents:
             robot_info = ""
@@ -624,6 +625,8 @@ class SkirosWidget(QWidget, SkirosInteractiveMarkers):
             for s in e._skill_list.values():
                 s.manager = ak
                 self._add_available_skill(s)
+                # log available skills
+                log.debug(self.__class__.__name__, "Available skill: {}".format(s))
         # simplifies hierarchy
         self.simplify_tree_hierarchy(root)
         self.skill_tree_widget.setSortingEnabled(True)
