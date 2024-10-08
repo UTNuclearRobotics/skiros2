@@ -25,19 +25,6 @@ class SkillManagerInterface:
         self._monitor_cb = None
         self.get_skill_list(True)
 
-    #     # create a service to update the skills
-    #     self._update_skills_srv = rospy.Service(self._skill_mgr_name + '/update_skills_smi', 
-    #                                             Trigger, 
-    #                                             self._update_skills_srv_cb)
-
-    # def _update_skills_srv_cb(self, req):
-    #     '''
-    #     Get skill list from skill manager
-    #     Which could be updated if the skill manager has been updated
-    #     '''
-    #     self.get_skill_list(update=True)
-    #     return TriggerResponse(success=True)
-
     @property
     def name(self):
         return self._skill_mgr_name

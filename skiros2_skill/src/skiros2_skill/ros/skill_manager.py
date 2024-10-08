@@ -227,11 +227,30 @@ class SkillManager:
         """
         self._instanciator.load_library(package, self._verbose)
 
+    def is_skill_in_world_model(self, name):
+        """
+        @brief Check if a skill is already in the world model
+        """
+        scene = self._wmi.get_scene()[0]
+        for e in scene:
+            if e.label == name:
+                return True
+        return False
+
     def add_skill(self, name, subclass="skiros:CompoundSkill"):
         """
         @brief Add a skill to the available skill set
         """
         skill = self._instanciator.add_instance(name)
+
+        # Don't add duplicates in the skill list
+        if skill not in self._skills:
+            self._skills.append(skill)
+
+        # Don't add duplicates in the world model
+        if self.is_skill_in_world_model(name):
+            return
+
         e = skill.toElement()
         e.addRelation(self._robot._id, "skiros:hasSkill", "-1")
         # print skill.printInfo(True)
@@ -390,6 +409,9 @@ class SkillManagerNode(DiscoverableNode):
         self.publish_runtime_parameters = msg.data
 
     def _update_skills_cb(self, _):
+        '''
+        Callback function for the update_skills service. 
+        '''
         self.sm.skills.clear()
         self._init_skills()
 
