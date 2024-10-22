@@ -145,6 +145,15 @@
 
 
 
+    <!-- http://rvmi.aau.dk/ontologies/skiros.owl#AprilTagID -->
+
+    <owl:DatatypeProperty rdf:about="http://rvmi.aau.dk/ontologies/skiros.owl#AprilTagID">
+        <rdfs:domain rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#AprilTag"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#positiveInteger"/>
+    </owl:DatatypeProperty>
+
+
+
     <!-- http://rvmi.aau.dk/ontologies/skiros.owl#ArmProperty -->
 
     <owl:DatatypeProperty rdf:about="http://rvmi.aau.dk/ontologies/skiros.owl#ArmProperty">
@@ -750,6 +759,11 @@
         <rdfs:subClassOf rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#TransformationPose"/>
     </owl:Class>
 
+    <!-- http://rvmi.aau.dk/ontologies/skiros.owl#AprilTag -->
+
+    <owl:Class rdf:about="http://rvmi.aau.dk/ontologies/skiros.owl#AprilTag">
+        <rdfs:subClassOf rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#TransformationPose"/>
+    </owl:Class>
 
     <!-- http://rvmi.aau.dk/ontologies/skiros.owl#Location -->
 
