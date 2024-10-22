@@ -1,6 +1,7 @@
 import rospy
 import skiros2_msgs.msg as msgs
 import skiros2_msgs.srv as srvs
+from std_srvs.srv import Trigger, TriggerResponse
 import skiros2_common.ros.utils as utils
 from skiros2_skill.ros.utils import *
 import skiros2_world_model.ros.world_model_interface as wmi
@@ -226,11 +227,30 @@ class SkillManager:
         """
         self._instanciator.load_library(package, self._verbose)
 
+    def is_skill_in_world_model(self, name):
+        """
+        @brief Check if a skill is already in the world model
+        """
+        scene = self._wmi.get_scene()[0]
+        for e in scene:
+            if e.label == name:
+                return True
+        return False
+
     def add_skill(self, name, subclass="skiros:CompoundSkill"):
         """
         @brief Add a skill to the available skill set
         """
         skill = self._instanciator.add_instance(name)
+
+        # Don't add duplicates in the skill list
+        if skill not in self._skills:
+            self._skills.append(skill)
+
+        # Don't add duplicates in the world model
+        if self.is_skill_in_world_model(name):
+            return
+
         e = skill.toElement()
         e.addRelation(self._robot._id, "skiros:hasSkill", "-1")
         # print skill.printInfo(True)
@@ -376,6 +396,7 @@ class SkillManagerNode(DiscoverableNode):
         self._initialized = True
 
         # Start communications
+        self._update_skills = rospy.Service('~update_skills', Trigger, self._update_skills_cb)
         self._command = rospy.Service('~command', srvs.SkillCommand, self._command_cb)
         self._monitor = rospy.Publisher("~monitor", msgs.TreeProgress, queue_size=20)
         self._tick_rate = rospy.Publisher("~tick_rate", Empty, queue_size=20)
@@ -386,6 +407,17 @@ class SkillManagerNode(DiscoverableNode):
 
     def _set_debug_cb(self, msg):
         self.publish_runtime_parameters = msg.data
+
+    def _update_skills_cb(self, _):
+        '''
+        Callback function for the update_skills service. 
+        '''
+        self.sm.skills.clear()
+        self._init_skills()
+
+        res = TriggerResponse()
+        res.success = True
+        return res
 
     def _init_skills(self):
         """
