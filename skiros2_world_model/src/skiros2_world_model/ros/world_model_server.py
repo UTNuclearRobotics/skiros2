@@ -41,6 +41,7 @@ class WorldModelServer(OntologyServer):
         rospack = rospkg.RosPack()
         self._skiros_dir = rospack.get_path('skiros2') + '/owl'
         self._workspace = rospy.get_param('~workspace_dir', self._skiros_dir)
+        ontology_sources = rospy.get_param('~ontology_sources', [])
         for (dirpath, dirnames, filenames) in walk(self._skiros_dir):
             for name in filenames:
                 if name.find('.owl') >= 0:
@@ -49,6 +50,11 @@ class WorldModelServer(OntologyServer):
             for name in filenames:
                 if name.find('.owl') >= 0:
                     self._ontology.load(dirpath + '/' + name)
+        for source in ontology_sources:
+            for (dirpath, dirnames, filenames) in walk(source):
+                for name in filenames:
+                    if name.find('.owl') >= 0:
+                        self._ontology.load(dirpath + '/' + name)
         if not self._workspace:
             self._workspace = self._skiros_dir
         self._ontology.workspace = self._workspace
