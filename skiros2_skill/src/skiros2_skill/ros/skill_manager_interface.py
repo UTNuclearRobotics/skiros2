@@ -6,7 +6,7 @@ import skiros2_common.ros.utils as utils
 from skiros2_skill.ros.utils import SkillHolder
 import skiros2_common.tools.logger as log
 import rostopic
-
+from std_srvs.srv import Trigger, TriggerResponse
 
 class SkillManagerInterface:
     def __init__(self, manager_name, author_name):
@@ -76,6 +76,9 @@ class SkillManagerInterface:
             else:
                 for c in res.list:
                     self._skill_list[c.name] = SkillHolder(self.name, c.type, c.name, utils.deserializeParamMap(c.params))
+
+        # log the skill list
+        log.info("[{}]".format(self.__class__.__name__), "Skill list: " + str(self._skill_list.keys()))
         return self._skill_list
 
     def get_skill(self, name):

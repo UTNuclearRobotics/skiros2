@@ -60,6 +60,7 @@ class TaskManagerNode(PrettyObject):
         if self._sli.has_changes:
             self._skills.clear()
             for ak, e in self._sli._agents.items():
+                e.get_skill_list(update=True) # update the skill list
                 for sk, s in e._skill_list.items():
                     s.manager = ak
                     self._skills[sk] = s

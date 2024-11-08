@@ -2,6 +2,8 @@ import skiros2_common.tools.logger as log
 from skiros2_skill.ros.skill_manager_interface import SkillManagerInterface
 from .discovery_interface import DiscoveryInterface
 
+import rospy
+from std_srvs.srv import Trigger, TriggerResponse
 
 class SkillLayerInterface(DiscoveryInterface):
     def __init__(self, author="unknown"):
@@ -11,6 +13,7 @@ class SkillLayerInterface(DiscoveryInterface):
         self._active_sm = set()
         self.set_monitor_cb(None)
         self.init_discovery("skill_managers", self._on_active, self._on_inactive)
+        self._update_skills_srv = rospy.Service('~reset_gui', Trigger, self._on_update_skills_srv_cb)
 
     def get_agent(self, agent=None):
         """
@@ -64,6 +67,22 @@ class SkillLayerInterface(DiscoveryInterface):
         self._agents[name] = SkillManagerInterface(name, self._author)
         self._agents[name].set_monitor_cb(self._progress_cb)
         self._new_changes = True
+
+    def _on_update_skills_srv_cb(self, _):
+        log.info(self.__class__.__name__, "New skills detected")
+
+        # this is required for the has_changes property to return True
+        #  the skiros_widget has a callback function to check this property
+        self._new_changes = True
+
+        # this forces the skill_manager_interface, embedded within the self._agents, 
+        # to update its skill list
+        for k, a in self._agents.items():
+            a.get_skill_list(update=True)
+        res = TriggerResponse()
+        res.success = True
+
+        return res
 
     def _on_inactive(self, name):
         log.info("[SkillLayerInterface]", "Skill manager {} went down.".format(name))

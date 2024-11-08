@@ -575,6 +575,26 @@ class WorldModel(IndividualsDataset):
         log.info("[load_scene]", "Loaded scene {}. ".format(self.filename))
 
     @synchronized
+    def load_new_graph_in_existing_context(self, filepath: str):
+        """
+        @brief Load a new graph in the existing context
+        """
+        if not path.isfile(filepath):
+            log.error("[load_context]", "Can't load scene {}. File not found. ".format(filepath))
+            return
+        self._stop_reasoners()
+        # self.reset(add_root=False)
+        self.context.parse(filepath, format='turtle')
+        individuals = self.context.query("SELECT ?x WHERE { ?x rdf:type <http://www.w3.org/2002/07/owl#NamedIndividual>. } ")
+        for i in individuals:
+            i = self.uri2lightstring(i[0])
+            iid = self._uri2id(i)
+            if iid >= 0:
+                self._id_gen.getId(iid)
+        self._start_reasoners()
+        log.info("[load_scene]", "Loaded scene {}. ".format(filepath))        
+
+    @synchronized
     def add_element(self, e, author):
         """
         @brief Add an element to the scene

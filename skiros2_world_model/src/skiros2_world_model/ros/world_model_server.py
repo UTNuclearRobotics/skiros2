@@ -12,6 +12,7 @@ from skiros2_world_model.core.world_model import WorldModel, IndividualsDataset,
 import uuid
 from time import sleep
 
+from std_srvs.srv import Trigger, TriggerResponse
 
 class WorldModelServer(OntologyServer):
     def __init__(self, anonymous=False):
@@ -35,6 +36,7 @@ class WorldModelServer(OntologyServer):
         self._modify = rospy.Service('~modify', srvs.WmModify, self._wm_modify_cb)
         self._monitor = rospy.Publisher("~monitor", msgs.WmMonitor, queue_size=20, latch=True)
         self._load_and_save = rospy.Service('~load_and_save', srvs.WoLoadAndSave, self._load_and_save_cb)
+        self._load_payload_context = rospy.Service('~load_payload_context', Trigger, self._wm_load_payload_context_cb)
         self.init_ontology_services()
 
     def _init_wm(self):
@@ -207,6 +209,15 @@ class WorldModelServer(OntologyServer):
         if self._verbose:
             log.info("[WmModify]", "{} {} {}. Time: {:0.3f} secs".format(msg.author, msg.action, [e.id for e in to_ret.elements], self._times.get_last()))
         return to_ret
+
+    def _wm_load_payload_context_cb(self, msg):
+        """"""
+        payload_context_filepath = rospy.get_param('~payload_context_filepath')
+        self._ontology.load_new_graph_in_existing_context(payload_context_filepath)
+
+        res = TriggerResponse()
+        res.success = True
+        return res
 
     def run(self):
         rospy.spin()
