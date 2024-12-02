@@ -12,9 +12,11 @@
   <arg name="reasoners_pkgs" default="[skiros2_std_reasoners]"/>
   <arg name="load_contexts" default="[]"/>
   <arg name="workspace_dir" default=""/>
+  <arg name="ontology_sources" default="[]"/>
 
   <node launch-prefix="$(arg prefix)" name="wm" pkg="skiros2_world_model" type="world_model_server_node" respawn="true" output="screen">
     <param name="workspace_dir" value="$(arg workspace_dir)" />
+    <param name="ontology_sources" value="$(arg ontology_sources)"/>
     <param name="init_scene" value="$(arg init_scene)" />
     <param name="verbose" value="$(arg verbose)" />
     <rosparam param = "reasoners_pkgs" subst_value="True">$(arg reasoners_pkgs)</rosparam>

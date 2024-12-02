@@ -12,6 +12,7 @@
   <arg name="verbose" default="false"/>
   <arg name="debug" default="false"/>
   <arg name="workspace_dir" default="$(find skiros2)/owl"/>
+  <arg name="ontology_sources" default="$(find skiros2)/owl"/>
   <arg name="init_scene" default=""/>
   <arg name="skill_mgr_on" default="true"/>
   <arg name="task_mgr_on" default="true"/>
@@ -25,6 +26,7 @@
       <arg name="reasoners_pkgs" value="[skiros2_std_reasoners]"/>
       <arg name="load_contexts" value="$(arg memory_contexts)"/>
       <arg name="workspace_dir" value="$(arg workspace_dir)"/>
+      <arg name="ontology_sources" value="$(arg ontology_sources)"/>
       <arg name="debug" value="$(arg debug)"/>
       <arg name="deploy" value="$(arg deploy)"/>
   </include>
