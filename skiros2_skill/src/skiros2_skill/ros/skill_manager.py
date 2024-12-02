@@ -382,8 +382,11 @@ class SkillManagerNode(DiscoverableNode):
         rospy.init_node("skill_mgr", anonymous=False)
         self.publish_runtime_parameters = False
         robot_name = rospy.get_name()
-        prefix = ""
-        full_name = rospy.get_param('~prefix', prefix) + ':' + robot_name[robot_name.rfind("/") + 1:]
+        prefix = rospy.get_param('~prefix', "")
+        if prefix[-1] == "#":
+            full_name = prefix + robot_name[robot_name.rfind("/") + 1:]
+        else:
+            full_name = prefix + ':' + robot_name[robot_name.rfind("/") + 1:]
         self.sm = SkillManager(rospy.get_param('~prefix', prefix), full_name, verbose=rospy.get_param('~verbose', True))
         self.sm.observe_task_progress(self._on_progress_update)
         self.sm.observe_tick(self._on_tick)
