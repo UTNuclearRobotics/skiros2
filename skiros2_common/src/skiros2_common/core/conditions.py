@@ -263,6 +263,96 @@ class ConditionProperty(ConditionBase):
         to_ret.setProperty("skiros:desiredState", self._desired_state)
         return to_ret
 
+class ConditionPropertyParam(ConditionBase):
+    """
+    @brief Condition over an element property, comparing it to a param
+    """
+
+    def __init__(self, clabel, olabel, subj, operator, param_name, desired_state):
+        self._desired_state = desired_state
+        self._subject_key = subj
+        self._param_name = param_name
+        self._label = clabel
+        self._operator = operator
+        self._owl_label = olabel
+        self._params = None
+        self._setDescription()
+
+    def isEqual(self, other):
+        if isinstance(other, ConditionPropertyParam):
+            return self._subject_key == other._subject_key and self._operator == other._operator and self._owl_label == other._owl_label and self._param_name == other._param_name and self._desired_state == other._desired_state
+        else:
+            return False
+
+    def hasConflict(self, other):
+        if isinstance(other, ConditionPropertyParam):
+            if self._owl_label == other._owl_label and self._param_name == other._param_name and self._desired_state != other._desired_state:
+                return self.getParamId(self._subject_key) == other.getParamId(other._subject_key) or self._subject_key == other._subject_key
+        return False
+
+    def _setDescription(self):
+        self._description = "[{}] {}-{}-{}{} ({})".format(self._label, self._subject_key, self._owl_label, self._operator, self._param_name, self._desired_state)
+
+    def evaluate(self, ph, wmi):
+        self._params = ph
+        self._wm = wmi
+        subj = self._params.getParamValue(self._subject_key)
+        self._description = "[{}] {}-{}-{}{} ({})".format(self._label, subj, self._owl_label, self._operator, self._param_name, self._desired_state)
+        if self._operator == "=":
+            return subj.hasProperty(self._owl_label, self._params.getParamValue(self._param_name)) == self._desired_state
+        else:
+            if not subj.hasProperty(self._owl_label):
+                return False
+            return operators[self._operator](subj.getProperty(self._owl_label).value, self._params.getParamValue(self._param_name)) == self._desired_state
+
+    def setTrue(self, ph, wmi):
+        self._params = ph
+        self._wm = wmi
+        subj = self._params.getParamValue(self._subject_key)
+        if subj.getIdNumber() < 0:
+            return False
+        self._has_cache = True
+        self._cache = deepcopy(subj)
+        if self._desired_state:
+            if not subj.hasProperty(self._owl_label, self._params.getParamValue(self._param_name)):
+                subj.appendProperty(self._owl_label, self._params.getParamValue(self._param_name))
+        else:
+            while subj.hasProperty(self._owl_label, self._params.getParamValue(self._param_name)):
+                subj.removePropertyValue(self._owl_label, self._params.getParamValue(self._param_name))
+        self._params.specify(self._subject_key, subj)
+        self._wm.update_element(subj)
+        return True
+
+    def revert(self, ph, wmi):
+        if self._has_cache:
+            self._params = ph
+            self._wm = wmi
+            #print self._description + "\n{}".format(self._cache.printState(True))
+            self._params.specify(self._subject_key, self._cache)
+            self._wm.update_element(self._cache)
+            self._has_cache = False
+            return True
+        return False
+
+    def setDesiredState(self, ph):
+        e = ph.getParamValue(self._subject_key)
+        if e.getIdNumber() >= 0:
+            return
+        if self._desired_state:
+            if not e.hasProperty(self._owl_label, self._params.getParamValue(self._param_name)):
+                e.appendProperty(self._owl_label, self._params.getParamValue(self._param_name))
+        else:
+            if e.hasProperty(self._owl_label, self._params.getParamValue(self._param_name)):
+                e.removePropertyValue(self._owl_label, self._params.getParamValue(self._param_name))
+
+    def toElement(self):
+        to_ret = Element("skiros:" + self.__class__.__name__, self._label)
+        to_ret.setProperty("skiros:hasSubject", self._subject_key)
+        to_ret.setProperty("skiros:appliedOnType", self._owl_label)
+        to_ret.setProperty("skiros:operator", self._operator)
+        to_ret.setProperty("skiros:desiredParamNameValue", self._param_name)
+        to_ret.setProperty("skiros:desiredState", self._desired_state)
+        return to_ret
 
 class ConditionRelation(ConditionBase):
     def __init__(self, clabel, olabel, subj, obj, desired_state):
