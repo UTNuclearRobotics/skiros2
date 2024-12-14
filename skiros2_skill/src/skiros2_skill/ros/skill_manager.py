@@ -383,7 +383,7 @@ class SkillManagerNode(DiscoverableNode):
         self.publish_runtime_parameters = False
         robot_name = rospy.get_name()
         prefix = rospy.get_param('~prefix', "")
-        if prefix[-1] == "#":
+        if len(prefix) > 0 and prefix[-1] == "#":
             full_name = prefix + robot_name[robot_name.rfind("/") + 1:]
         else:
             full_name = prefix + ':' + robot_name[robot_name.rfind("/") + 1:]
