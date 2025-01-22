@@ -1,0 +1,136 @@
+<rdf:RDF xmlns="http://me.utexas.edu/ontologies/nrg/spatial#"
+         xml:base="http://me.utexas.edu/ontologies/nrg/spatial"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:pos="http://purl.org/ieee1872-owl/pos#"
+         xmlns:dc="http://purl.org/dc/elements/1.1/">
+
+    <owl:Ontology rdf:about="http://me.utexas.edu/ontologies/nrg/spatial">
+        <dc:title>Spatial</dc:title>
+        <dc:description>Concepts related to spatial coordinate systems.</dc:description>
+
+        <dc:creator>The University of Texas at Austin</dc:creator>
+        <dc:contributor>Blake Anderson</dc:contributor>
+        <owl:versionInfo>1.0.0</owl:versionInfo>
+
+        <owl:imports rdf:resource="http://purl.org/ieee1872-owl/pos#"/>
+    </owl:Ontology>
+
+    <!-- Properties -->
+
+    <!-- General coordinate. This is could be either continuous or discrete. -->
+    <owl:DatatypeProperty rdf:about="#hasCoordinate">
+        <rdfs:domain rdf:resource="http://purl.org/ieee1872-owl/pos#PositionPoint"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </owl:DatatypeProperty>
+
+    <!-- Real-number coordinate -->
+    <owl:DatatypeProperty rdf:about="#hasRealCoordinate">
+        <rdfs:subPropertyOf rdf:resource="#hasCoordinate"/>
+        <rdfs:domain rdf:resource="#PositionPointEuclidean"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    </owl:DatatypeProperty>
+
+    <!-- Subproperties for X, Y, Z coordinates -->
+    <owl:DatatypeProperty rdf:about="#hasRealXCoordinate">
+        <rdfs:subPropertyOf rdf:resource="#hasRealCoordinate"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="#hasRealYCoordinate">
+        <rdfs:subPropertyOf rdf:resource="#hasRealCoordinate"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="#hasRealZCoordinate">
+        <rdfs:subPropertyOf rdf:resource="#hasRealCoordinate"/>
+    </owl:DatatypeProperty>
+
+    <!-- inPCS object property. Places a point inside a coordinate system. -->
+    <owl:ObjectProperty rdf:about="http://purl.org/ieee1872-owl/pos#inPCS">
+        <rdfs:domain rdf:resource="http://purl.org/ieee1872-owl/pos#PositionPoint"/>
+        <rdfs:range rdf:resource="http://purl.org/ieee1872-owl/pos#PositionCoordinateSystem"/>
+    </owl:ObjectProperty>
+
+    <!-- Classes -->
+
+    <!-- Euclidean Coordinate System -->
+    <owl:Class rdf:about="#EuclideanCoordinateSystem">
+        <rdfs:subClassOf rdf:resource="http://purl.org/ieee1872-owl/pos#PositionCoordinateSystem"/>
+    </owl:Class>
+
+    <!-- R2 Coordinate System -->
+    <owl:Class rdf:about="#CoordinateSystemR2">
+        <rdfs:subClassOf rdf:resource="#EuclideanCoordinateSystem"/>
+    </owl:Class>
+
+    <!-- R3 Coordinate System -->
+    <owl:Class rdf:about="#CoordinateSystemR3">
+        <rdfs:subClassOf rdf:resource="#EuclideanCoordinateSystem"/>
+    </owl:Class>
+
+    <!-- Point in Euclidean space -->
+    <owl:Class rdf:about="#PositionPointEuclidean">
+        <rdfs:subClassOf rdf:resource="http://purl.org/ieee1872-owl/pos#PositionPoint"/>
+    </owl:Class>
+
+    <!-- Point in R3 space -->
+    <owl:Class rdf:about="#PositionInR3">
+        <rdfs:subClassOf rdf:resource="#PositionPointEuclidean"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasRealXCoordinate"/>
+                <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasRealYCoordinate"/>
+                <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasRealZCoordinate"/>
+                <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://purl.org/ieee1872-owl/pos#inPCS"/>
+                <owl:hasValue rdf:resource="#CoordinateSystemR3"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+
+    <!-- Point in R2 space -->
+    <owl:Class rdf:about="#PositionInR2">
+        <rdfs:subClassOf rdf:resource="#PositionPointEuclidean"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasRealXCoordinate"/>
+                <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasRealYCoordinate"/>
+                <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <!-- No Z coordinate for R2 -->
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">0</owl:maxCardinality>
+                <owl:onProperty rdf:resource="#hasRealZCoordinate"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://purl.org/ieee1872-owl/pos#inPCS"/>
+                <owl:hasValue rdf:resource="#CoordinateSystemR2"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+
+</rdf:RDF>

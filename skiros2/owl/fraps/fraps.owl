@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://me.utexas.edu/ontologies/nrg/fraps#"
+         xml:base="http://me.utexas.edu/ontologies/nrg/fraps"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:sumo="http://www.inf.ufrgs.br/phi-group/ontologies/sumo.owl#"
+         xmlns:skiros="http://rvmi.aau.dk/ontologies/skiros.owl#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xmlns:xml="http://www.w3.org/XML/1998/namespace"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:dc="http://purl.org/dc/elements/1.1/">
+
+    <owl:Ontology rdf:about="http://me.utexas.edu/ontologies/nrg/fraps">
+        <dc:title>Field-Reconfigurable Autonomous Platforms (FRAPs)</dc:title>
+        <dc:description>Concepts for the Field-Reconfigurable Autonomous Platforms (FRAPs) modularity framework.</dc:description>
+
+        <dc:creator>The University of Texas at Austin</dc:creator>
+        <dc:contributor>Blake Anderson</dc:contributor>
+        <owl:versionInfo>1.0.0</owl:versionInfo>
+
+        <owl:imports rdf:resource="http://purl.org/ieee1872-owl/cora-fullaxiom"/>
+    </owl:Ontology>
+
+    <!-- Payload Relationships -->
+    <owl:ObjectProperty rdf:about="#impartsSkill">
+        <rdfs:domain rdf:resource="#Payload"/>
+        <rdfs:range rdf:resource="http://rvmi.aau.dk/ontologies/skiros.owl#Skill"/>
+    </owl:ObjectProperty>
+
+    <!-- Payload Classes -->
+    <owl:Class rdf:about="#Payload">
+        <rdfs:subClassOf rdf:resource="http://www.inf.ufrgs.br/phi-group/ontologies/sumo.owl#Device"/>
+    </owl:Class>
+</rdf:RDF>

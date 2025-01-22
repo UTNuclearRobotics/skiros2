@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://me.utexas.edu/ontologies/nrg/apriltag_detector#"
+         xml:base="http://me.utexas.edu/ontologies/nrg/apriltag_detector"
+         xmlns:fraps="http://me.utexas.edu/ontologies/nrg/fraps#"
+         xmlns:rparts="http://www.inf.ufrgs.br/phi-group/ontologies/RParts.owl#"
+         xmlns:sumo="http://www.inf.ufrgs.br/phi-group/ontologies/sumo.owl#"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xmlns:xml="http://www.w3.org/XML/1998/namespace"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:dc="http://purl.org/dc/elements/1.1/">
+
+    <owl:Ontology rdf:about="http://me.utexas.edu/ontologies/nrg/apriltag_detector">
+        <dc:title>AprilTag Detector</dc:title>
+        <dc:description>Concepts for FRAPs AprilTag Detector payload.</dc:description>
+
+        <dc:creator>The University of Texas at Austin</dc:creator>
+        <dc:contributor>Blake Anderson</dc:contributor>
+        <owl:versionInfo>1.0.0</owl:versionInfo>
+
+        <owl:imports rdf:resource="http://me.utexas.edu/ontologies/nrg/fraps#"/>
+    </owl:Ontology>
+
+    <!-- Properties -->
+    <owl:DatatypeProperty rdf:about="#hasTagID">
+        <rdfs:domain rdf:resource="#AprilTag"/>
+        <rdfs:range rdf:datatype="http://www.w3.org/2001/XMLSchema#positiveInteger"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="#viewDistanceIs">
+        <rdfs:domain rdf:resource="#AprilTagView"/>
+        <rdfs:range rdf:datatype="http://www.w3.org/2001/XMLSchema#float"/>
+    </owl:DatatypeProperty>
+
+    <!-- Relationships -->
+    <owl:ObjectProperty rdf:about="#seesAprilTag">
+        <rdfs:domain rdf:resource="#Detector"/>
+        <rdfs:range rdf:resource="#AprilTagView"/>
+    </owl:ObjectProperty>
+
+    <owl:ObjectProperty rdf:about="#viewingTag">
+        <rdfs:domain rdf:resource="#AprilTagView"/>
+        <rdfs:range rdf:resource="#AprilTag"/>
+    </owl:ObjectProperty>
+
+    <!-- Classes -->
+
+    <owl:Class rdf:about="#AprilTagView">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#viewDistanceIs"/>
+                <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#viewingTag"/>
+                <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+
+    <owl:Class rdf:about="#Detector">
+        <rdfs:subClassOf rdf:resource="http://me.utexas.edu/ontologies/nrg/fraps#FRAPsPayload"/>
+        <rdfs:subClassOf rdf:resource="http://www.inf.ufrgs.br/phi-group/ontologies/RParts.owl#ExteroceptiveSensor"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="#FiducialMarker">
+        <rdfs:subClassOf rdf:resource="http://www.inf.ufrgs.br/phi-group/ontologies/sumo.owl#Artifact"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="#MatrixCode">
+        <rdfs:subClassOf rdf:resource="#FiducialMarker"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="#AprilTag">
+        <rdfs:subClassOf rdf:resource="#MatrixCode"/>
+
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasTagID"/>
+                <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+</rdf:RDF>

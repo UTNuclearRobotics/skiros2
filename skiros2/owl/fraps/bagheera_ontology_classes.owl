@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://me.utexas.edu/ontologies/nrg/bagheera#"
+         xml:base="http://me.utexas.edu/ontologies/nrg/bagheera"
+         xmlns:mr="http://me.utexas.edu/ontologies/nrg/mobile_robotics#"
+         xmlns:panther="http://me.utexas.edu/ontologies/nrg/husarion_panther#"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xmlns:xml="http://www.w3.org/XML/1998/namespace"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:skiros="http://rvmi.aau.dk/ontologies/skiros.owl#"
+         xmlns:dc="http://purl.org/dc/elements/1.1/">
+
+    <owl:Ontology rdf:about="http://me.utexas.edu/ontologies/nrg/bagheera">
+        <dc:title>Bagheera</dc:title>
+        <dc:description>Bagheera robot of the UT Nuclear Robotics Group.</dc:description>
+
+        <dc:creator>The University of Texas at Austin</dc:creator>
+        <dc:contributor>Blake Anderson</dc:contributor>
+        <owl:versionInfo>1.0.0</owl:versionInfo>
+
+        <owl:imports rdf:resource="http://me.utexas.edu/ontologies/nrg/husarion_panther#"/>
+    </owl:Ontology>
+
+    <owl:NamedIndividual rdf:about="#bagheera">
+        <rdf:type rdf:resource="http://me.utexas.edu/ontologies/nrg/mobile_robotics#MobileRobot"/>
+        <mr:hasMobileBase rdf:resource="http://me.utexas.edu/ontologies/nrg/husarion_panther#Panther"/>
+        <skiros:DiscreteReasoner>AauSpatialReasoner</skiros:DiscreteReasoner>
+        <skiros:SkillMgr>/bagheera</skiros:SkillMgr>
+    </owl:NamedIndividual>
+</rdf:RDF>

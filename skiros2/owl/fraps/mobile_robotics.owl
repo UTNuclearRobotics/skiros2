@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!--xmlns:cora="http://purl.org/ieee1872-owl/cora-bare#"-->
+<rdf:RDF xmlns="http://me.utexas.edu/ontologies/nrg/mobile_robotics#"
+         xml:base="http://me.utexas.edu/ontologies/nrg/mobile_robotics"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:sumo="http://www.inf.ufrgs.br/phi-group/ontologies/sumo.owl#"
+         xmlns:cora="http://www.inf.ufrgs.br/phi-group/ontologies/cora.owl#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xmlns:xml="http://www.w3.org/XML/1998/namespace"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:dc="http://purl.org/dc/elements/1.1/">
+
+    <owl:Ontology rdf:about="http://me.utexas.edu/ontologies/nrg/mobile_robotics">
+        <dc:title>Mobile Robotics</dc:title>
+        <dc:description>Concepts to mobile robotic systems.</dc:description>
+
+        <dc:creator>The University of Texas at Austin</dc:creator>
+        <dc:contributor>Blake Anderson</dc:contributor>
+        <owl:versionInfo>1.0.0</owl:versionInfo>
+
+        <owl:imports rdf:resource="http://purl.org/ieee1872-owl/cora-fullaxiom"/>
+    </owl:Ontology>
+
+    <!-- Mobile Robot Relationships -->
+    <owl:ObjectProperty rdf:about="#hasMobileBase">
+        <rdfs:domain rdf:resource="#MobileRobot"/>
+        <rdfs:range rdf:resource="#MobileBase"/>
+    </owl:ObjectProperty>
+
+    <!-- Mobile Robot Classes -->
+    <owl:Class rdf:about="#MobileBase">
+        <rdfs:subClassOf rdf:resource="http://www.inf.ufrgs.br/phi-group/ontologies/sumo.owl#Device"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="#GroundBase">
+        <rdfs:subClassOf rdf:resource="#MobileBase"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="#AerialBase">
+        <rdfs:subClassOf rdf:resource="#MobileBase"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="#AquaticBase">
+        <rdfs:subClassOf rdf:resource="#MobileBase"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="#AquaticSurfaceBase">
+        <rdfs:subClassOf rdf:resource="#AquaticBase"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="#UnderwaterBase">
+        <rdfs:subClassOf rdf:resource="#AquaticBase"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="#MobileRobot">
+        <rdfs:subClassOf rdf:resource="http://www.inf.ufrgs.br/phi-group/ontologies/cora.owl#Robot"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasMobileBase"/>
+                <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+</rdf:RDF>
